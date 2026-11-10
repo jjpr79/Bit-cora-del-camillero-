@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidRecord(data) {
+      return data.pacienteNombre is string 
+          && data.historiaClinica is string 
+          && data.actividad is string 
+          && data.horaInicio is string
+          && ( !('horaFinal' in data) || data.horaFinal is string )
+          && ( !('enfermeraSolicita' in data) || data.enfermeraSolicita is string )
+          && ( !('enfermeraVerifica' in data) || data.enfermeraVerifica is string )
+          && ( !('observaciones' in data) || data.observaciones is string );
+    }
+
+    // Records collection
+    match /records/{recordId} {
+      allow create: if isSignedIn() 
+                    && isValidId(recordId)
+                    && isValidRecord(incoming())
+                    && incoming().createdAt == request.time;
+      
+      allow read: if isSignedIn();
+      
+      allow update: if isSignedIn()
+                    && isValidRecord(incoming())
+                    && incoming().updatedAt == request.time
+                    && incoming().createdAt == existing().createdAt;
+      
+      allow delete: if false; // For now, prevent deletion
+    }
+  }
+}

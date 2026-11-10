@@ -1,0 +1,6 @@
+{
+  "name": "Bitácora de Actividades de Camilleros",
+  "description": "Aplicación para el registro de traslado de pacientes en el servicio de urgencias.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

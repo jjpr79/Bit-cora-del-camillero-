@@ -1,0 +1,28 @@
+{
+  "entities": {
+    "Record": {
+      "title": "Registro de Traslado",
+      "description": "Registro de traslado de paciente en la bitácora.",
+      "type": "object",
+      "properties": {
+        "pacienteNombre": { "type": "string", "description": "Nombre del paciente" },
+        "historiaClinica": { "type": "string", "description": "Número de historia clínica" },
+        "actividad": { "type": "string", "description": "Actividad realizada" },
+        "horaInicio": { "type": "string", "format": "date-time", "description": "Hora de inicio" },
+        "enfermeraSolicita": { "type": "string", "description": "Nombre de la enfermera que solicita" },
+        "horaFinal": { "type": "string", "format": "date-time", "description": "Hora de finalización" },
+        "enfermeraVerifica": { "type": "string", "description": "Nombre de la enfermera que verifica" },
+        "observaciones": { "type": "string", "description": "Observaciones" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Fecha de creación" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Fecha de actualización" }
+      },
+      "required": ["pacienteNombre", "historiaClinica", "actividad", "horaInicio"]
+    }
+  },
+  "firestore": {
+    "/records/{recordId}": {
+      "schema": "Record",
+      "description": "Colección de registros de traslado"
+    }
+  }
+}
